@@ -75,9 +75,12 @@
   padding-top: 62px
   padding-left: 30px
 
-.section-right
+.section_right
   width: 50%
   padding-left: 10px
+  border-radius: 10px
+  opacity: 0.6
+  background: #907F85
 
   @media (max-width: 767px)
     width: 100%
@@ -85,8 +88,6 @@
     padding-left: 0
 
 .city-inner
-  //  position: relative
-  //  display: inline-block
   width: 100%
   display: flex
 
@@ -121,11 +122,5 @@
   outline: none
   cursor: pointer
 
-.section-bottom
-  width: 50%
-  margin-top: 16px
-
-  @media (max-width: 767px)
-    width: 100%
 
 </style>
