@@ -1,40 +1,49 @@
 <script lang="ts" setup>
-
+import { capitalLetter} from'@/method'
+ const props = defineProps({
+  weatherInfo: {
+    type: [Object, null],
+    required: true,
+  }
+ })
+ const today = new Date().toLocaleDateString('en-EN', {weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'})
 </script>
 
 <template>
-  <div class="summary">
-    <div
-      style="background-image: url('../assets/imgvue/weather-main/thunderstorm.png');"
-      class="pic-main"
-    ></div>
+  <div v-if="weatherInfo?.weather" class="summary">
+    <div class="summary-left">
     <div class="weather">
       <div class="temp">
-      14 °C
+      {{ Math.round(weatherInfo?.main?.temp) }} °C
      </div>
     <div class="weather-desc text-block">
-      Thunderstorm
+      {{capitalLetter(weatherInfo?.weather[0].description)}}
      </div>
     </div>
     <div class="city text-block">
-      Paris,
-       FR
+      {{ weatherInfo?.name }},
+       {{weatherInfo?.sys?.country}}
     </div>
     <div class="date text-block">
-    Thu, March 16, 2023
+    {{ today }}
     </div>
+  </div>
+    <div
+      :style="`background-image: url('./src/assets/imgvue/weather-main/${weatherInfo?.weather[0].description}.png')`"
+      class="weather-picture"
+    ></div>
     </div>
 </template>
 
 <style lang="sass" scoped>
 @import '@/assets/styles/main'
-.pic-main
-  width: 60px
-  height: 60px
-  margin:  0 12px
-  background: url('../assets/imgvue/weather-main/thunderstorm.png')
+.summary
+  display: flex
+.weather-picture
+  width: 144px
+  height: 144px
+  margin:  20px 
   background-repeat: no-repeat
-  background-position: 50% 50%
   background-size: contain
 
 .city
@@ -70,12 +79,12 @@
 .weather-desc
 
   &::before
-    background-image: url('/src/assets/img/weather.svg')
+    background-image: url('./src/assets/imgvue/weather.svg')
 
 .city
 
   &::before
-    background-image: url('/src/assets/img/location.svg')
+    background-image: url('./src/assets/imgvue/location.svg')
 
 .date
 
@@ -83,6 +92,6 @@
     left: 2px
     width: 15px
     height: 15px
-    background-image: url('/src/assets/img/calendar.svg')
+    background-image: url('./src/assets/imgvue/calendar.svg')
 
 </style>

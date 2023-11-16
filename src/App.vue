@@ -1,10 +1,18 @@
 <script setup lang="ts">
-  // import { ref, computed} from 'vue' 
-  // import { API_KEY, BASE_URL } from "@/apiCon"
-   import WeatherHeader from '@/components/WeatherHeader.vue'
-  // import BigBlock from '@/components/BigBlock.vue'
-  
-</script>
+  import { ref, onMounted, computed} from 'vue';
+  import { API_KEY, BASE_URL } from '@/apiCon';
+  import WeatherHeader from './components/WeatherHeader.vue';
+
+  const city = ref('Mogilev');
+  const weatherInfo = ref(null);
+
+  function getWeather() {
+    fetch(`${BASE_URL}?q=${city.value}&units=metric&appid=${API_KEY}`)
+    .then((response) => response.json())
+    .then((data) => weatherInfo.value = data)
+  }
+  onMounted(getWeather)
+   </script>
 
 <template>
  <div class="page">
@@ -18,65 +26,12 @@
               <section class="section_right">
                 <div class="info">
                   <div class="city-inner">
-                    <input type="text" class="search">
+                    <input v-model="city" @keyup.enter="getWeather" type="text" class="search">
                   </div>
-                  <WeatherHeader />
+                  <WeatherHeader :weatherInfo="weatherInfo" />
                 </div>
               </section>
-              <section class="section section-right">
-                <!-- <BigBlock /> -->
-              </section> 
             </div>
-            <!--<div class="sections">
-              <section class="section-bottom">
-                <div
-                  class="block-bottom"
-                >
-                  <div class="block-bottom-inner">
-                    <div class="block-bottom-pic pic-coords"></div>
-                    <div class="block-bottom-texts">
-                      <div class="block-bottom-text-block">
-                        <div class="block-bottom-text-block-title">
-                          Longitude: 2.3488
-                        </div>
-                        <div class="block-bottom-text-block-desc">
-                          Longitude measures distance east or west of the prime meridian.
-                        </div>
-                      </div>
-                      <div class="block-bottom-text-block">
-                        <div class="block-bottom-text-block-title">
-                          Latitude: 48.8534
-                        </div>
-                        <div class="block-bottom-text-block-desc">
-                          Latitude lines start at the equator (0 degrees latitude) and run east and west, parallel to the equator. 
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <section class="section-bottom">
-                <div
-                  class="block-bottom"
-                >
-                  <div class="block-bottom-inner">
-                    <div class="block-bottom-pic pic-humidity"></div>
-                    <div class="block-bottom-texts">
-                      <div class="block-bottom-text-block">
-                        <div class="block-bottom-text-block-title">
-                          Humidity: 60 %
-                        </div>
-                        <div class="block-bottom-text-block-desc">
-                          Humidity is the concentration of water vapor present in the air. Water vapor, the gaseous state of water, is generally invisible to the human eye.
-                          <br /><br />
-                          The same amount of water vapor results in higher relative humidity in cool air than warm air.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>-->
           </div>
         </div>
       </main> 
@@ -95,7 +50,7 @@
   background-color: #000
 
 .tablet
-  width: 100%
+  width: 900px
   padding: 20px
   background: url('@/assets/imgvue/Frame1.png')
   background-repeat: no-repeat
@@ -130,18 +85,19 @@
     padding-left: 0
 
 .city-inner
-  // position: relative
-  // display: inline-block
+  //  position: relative
+  //  display: inline-block
   width: 100%
+  display: flex
 
   &::after
     content: ''
     position: absolute
-    top: 0
-    right: 10px
+    top: 500
+    right: 230px
     width: 25px
     height: 25px
-    background: url('./assets/img/search.svg') no-repeat 50% 50%
+    background: url('./assets/imgvue/search.svg') no-repeat 50% 50%
     background-size: contain
     transform: translateY(50%)
     cursor: pointer
@@ -149,12 +105,13 @@
 .info
   height: 100%
   padding: 16px
-  background: url('./assets/img/gradient-1.jpg') no-repeat 50% 50%
+  background: url('./assets/imgvue/gradient-1.jpg') no-repeat 50% 50%
   background-size: cover
   border-radius: 25px
 
 .search
   width: 100%
+  min-width: 300px
   padding: 16px
   font-family: 'Montserrat', sans-serif 
   color: #000
