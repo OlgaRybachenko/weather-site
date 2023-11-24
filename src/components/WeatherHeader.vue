@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import { capitalLetter} from'@/method'
- const props = defineProps({
-  weatherInfo: {
-    type: [Object, null],
-    required: true,
-  }
- })
+  const props = defineProps({
+   weatherInfo: {
+     type: [Object, null],
+     required: true,
+   }
+  })
  const today = new Date().toLocaleDateString('en-EN', {weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'})
 </script>
 
 <template>
-  <div v-if="weatherInfo?.weather" class="summary">
-    <div class="summary-left">
+  <div v-if="weatherInfo?.weather" class="summary" >
+    <div class="summary-left" :class="headerClasses">
     <div class="weather">
       <div class="temp">
       {{ Math.round(weatherInfo?.main?.temp) }} °C
@@ -93,5 +93,4 @@ import { capitalLetter} from'@/method'
     width: 15px
     height: 15px
     background-image: url('./src/assets/imgvue/calendar.svg')
-
 </style>

@@ -1,7 +1,11 @@
 <script setup lang="ts">
-  import { ref, onMounted, computed} from 'vue';
+  import { ref, onMounted } from 'vue';
   import { API_KEY, BASE_URL } from '@/apiCon';
   import WeatherHeader from './components/WeatherHeader.vue';
+  import BigBlock from './components/BigBlock.vue';
+  import PageContent from './components/PageContent.vue';
+  import PageFooter from './components/PageFooter.vue';
+  
 
   const city = ref('Mogilev');
   const weatherInfo = ref(null);
@@ -12,6 +16,7 @@
     .then((data) => weatherInfo.value = data)
   }
   onMounted(getWeather)
+
    </script>
 
 <template>
@@ -31,8 +36,15 @@
                   <WeatherHeader :weatherInfo="weatherInfo" />
                 </div>
               </section>
-            </div>
+              </div>
+              <section class="section section-right">
+                <BigBlock :weatherInfo="weatherInfo" />
+              </section>
+              <div v-if="weatherInfo?.weather">
+                <PageContent :coord="weatherInfo.coord" />
+            <PageFooter :humidity="weatherInfo.main.humidity" />
           </div>
+        </div>
         </div>
       </main> 
     </div>
@@ -45,12 +57,13 @@
   display: flex
   justify-content: center
   align-items: center
-  min-height: 100vh
+  min-height: 100%
   padding: 20px 0
   background-color: #000
 
 .tablet
   width: 900px
+  height: 100%
   padding: 20px
   background: url('@/assets/imgvue/Frame1.png')
   background-repeat: no-repeat
@@ -121,6 +134,4 @@
   border: none
   outline: none
   cursor: pointer
-
-
 </style>
