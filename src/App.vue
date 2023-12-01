@@ -1,14 +1,16 @@
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { API_KEY, BASE_URL } from '@/apiCon';
   import WeatherHeader from './components/WeatherHeader.vue';
   import BigBlock from './components/BigBlock.vue';
   import PageContent from './components/PageContent.vue';
   import PageFooter from './components/PageFooter.vue';
+  import { capitalLetter } from './method';
   
 
   const city = ref('Mogilev');
   const weatherInfo = ref(null);
+  const onError = computed(() => weatherInfo.value?.cod !==200);
 
   function getWeather() {
     fetch(`${BASE_URL}?q=${city.value}&units=metric&appid=${API_KEY}`)
@@ -28,19 +30,23 @@
               <section class="section section_left">
                 <img src="./assets/imgvue/Logo.png" alt="" class="section-left_logo">
               </section>
-              <section class="section_right">
+              <section :class="['section_right', {'right-error': onError}]">
                 <div class="info">
                   <div class="city-inner">
                     <input v-model="city" @keyup.enter="getWeather" type="text" class="search">
                   </div>
-                  <WeatherHeader :weatherInfo="weatherInfo" />
+                  <WeatherHeader v-if="!onError" :weatherInfo="weatherInfo" />
+                  <div v-else class="on-error">
+                    <div class="on-error_title">Something went wrong</div>
+                    <div v-if="weatherInfo?.message" class="on-error_article">{{ capitalLetter(weatherInfo?.message) }}</div>
+                  </div>
                 </div>
               </section>
               </div>
-              <section class="section section-right">
+              <section v-if="!onError" class="section section-right">
                 <BigBlock :weatherInfo="weatherInfo" />
               </section>
-              <div v-if="weatherInfo?.weather">
+              <div v-if="!onError">
                 <PageContent :coord="weatherInfo.coord" />
             <PageFooter :humidity="weatherInfo.main.humidity" />
           </div>
@@ -94,6 +100,11 @@
   border-radius: 10px
   opacity: 0.6
   background: #907F85
+
+  &.right-error
+    min-width: 200px
+    width: auto
+    padding-right: 0
 
   @media (max-width: 767px)
     width: 100%

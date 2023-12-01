@@ -10,7 +10,7 @@ import { capitalLetter} from'@/method'
 </script>
 
 <template>
-  <div v-if="weatherInfo?.weather" class="summary" >
+  <div class="summary" >
     <div class="summary-left" :class="headerClasses">
     <div class="weather">
       <div class="temp">
